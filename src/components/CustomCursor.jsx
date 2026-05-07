@@ -3,24 +3,35 @@ import { motion, useSpring, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 })
+  const [enabled, setEnabled] = useState(false)
 
   const springConfig = { damping: 25, stiffness: 200 }
   const ringX = useSpring(useMotionValue(-100), springConfig)
   const ringY = useSpring(useMotionValue(-100), springConfig)
 
   useEffect(() => {
+    const media = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)')
+    const updateEnabled = () => setEnabled(media.matches)
+    updateEnabled()
+    media.addEventListener('change', updateEnabled)
+
     const handleMove = (e) => {
+      if (!media.matches) return
       setPosition({ x: e.clientX, y: e.clientY })
       ringX.set(e.clientX)
       ringY.set(e.clientY)
     }
     window.addEventListener('mousemove', handleMove)
-    return () => window.removeEventListener('mousemove', handleMove)
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+      media.removeEventListener('change', updateEnabled)
+    }
   }, [ringX, ringY])
+
+  if (!enabled) return null
 
   return (
     <>
-      {/* Dot */}
       <div
         className="fixed z-[9999] pointer-events-none rounded-full"
         style={{
@@ -32,8 +43,8 @@ export default function CustomCursor() {
           top: position.y - 4,
           transform: 'translate(0, 0)',
         }}
+        aria-hidden="true"
       />
-      {/* Ring */}
       <motion.div
         className="fixed z-[9998] pointer-events-none rounded-full border border-[#00f5ff]"
         style={{
@@ -45,6 +56,7 @@ export default function CustomCursor() {
           translateY: '-50%',
           boxShadow: '0 0 10px rgba(0,245,255,0.3)',
         }}
+        aria-hidden="true"
       />
     </>
   )

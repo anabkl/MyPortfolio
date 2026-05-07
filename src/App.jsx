@@ -10,23 +10,31 @@ import Footer from './components/Footer'
 import LoadingScreen from './components/LoadingScreen'
 import CustomCursor from './components/CustomCursor'
 
+const LOADING_TIMEOUT = 1200
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2500)
+    const timer = setTimeout(() => setIsLoading(false), LOADING_TIMEOUT)
     return () => clearTimeout(timer)
   }, [])
 
   return (
-    <div className="bg-[#0a0a0a] text-white min-h-screen">
+    <div className="bg-[#0a0a0a] text-white min-h-screen antialiased">
+      <a
+        href="#main-content"
+        className="skip-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00f5ff]"
+      >
+        Skip to main content
+      </a>
       <CustomCursor />
       {isLoading ? (
         <LoadingScreen />
       ) : (
         <>
           <Navbar />
-          <main>
+          <main id="main-content">
             <Hero />
             <About />
             <Projects />

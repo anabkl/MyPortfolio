@@ -49,7 +49,7 @@ const itemVariants = {
 
 export default function About() {
   return (
-    <section id="about" className="py-24 px-4">
+    <section id="about" className="py-24 px-4" aria-labelledby="about-title">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -58,7 +58,7 @@ export default function About() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 id="about-title" className="text-4xl md:text-5xl font-bold mb-4">
             About <span className="gradient-text">Me</span>
           </h2>
           <div className="w-24 h-1 mx-auto rounded-full" style={{ background: 'linear-gradient(90deg, #00f5ff, #bf00ff)' }} />

@@ -67,7 +67,7 @@ export default function Projects() {
   const filtered = active === 'All' ? projects : projects.filter((p) => p.category === active)
 
   return (
-    <section id="projects" className="py-24 px-4 bg-white/[0.02]">
+    <section id="projects" className="py-24 px-4 bg-white/[0.02]" aria-labelledby="projects-title">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -76,7 +76,7 @@ export default function Projects() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 id="projects-title" className="text-4xl md:text-5xl font-bold mb-4">
             My <span className="gradient-text">Projects</span>
           </h2>
           <div className="w-24 h-1 mx-auto rounded-full mb-8" style={{ background: 'linear-gradient(90deg, #00f5ff, #bf00ff)' }} />
@@ -95,6 +95,7 @@ export default function Projects() {
                     : 'border-white/20 text-gray-300 hover:border-[#00f5ff] hover:text-[#00f5ff]'
                 }`}
                 style={active === f ? { background: 'linear-gradient(135deg, #00f5ff, #bf00ff)' } : {}}
+                aria-pressed={active === f}
               >
                 {f}
               </motion.button>
@@ -108,15 +109,17 @@ export default function Projects() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
+            exit={{ opacity: 0 }}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {filtered.map((project) => (
-              <motion.div
+              <motion.article
                 key={project.title}
                 variants={cardVariants}
                 whileHover={{ scale: 1.02, y: -4 }}
-                className="glass rounded-2xl p-6 flex flex-col gap-4 hover:border-[#00f5ff]/40 transition-all duration-300 hover:glow-cyan"
+                className="group relative overflow-hidden glass rounded-2xl p-6 flex flex-col gap-4 hover:border-[#00f5ff]/40 transition-all duration-300 hover:glow-cyan"
               >
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-br from-[#00f5ff]/10 via-transparent to-[#bf00ff]/10" />
                 <div>
                   <span
                     className="text-xs font-mono px-2 py-1 rounded-full mb-3 inline-block"
@@ -149,6 +152,7 @@ export default function Projects() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-[#00f5ff] transition-colors"
+                    aria-label={`${project.title} GitHub repository`}
                   >
                     <GithubIcon size={16} />
                     GitHub
@@ -159,13 +163,14 @@ export default function Projects() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-sm text-gray-400 hover:text-[#bf00ff] transition-colors"
+                      aria-label={`${project.title} live demo`}
                     >
                       <ExternalLink size={16} />
                       Live Demo
                     </a>
                   )}
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </motion.div>
         </AnimatePresence>

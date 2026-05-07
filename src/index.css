@@ -10,6 +10,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -19,6 +23,7 @@ body {
   color: #ffffff;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 ::-webkit-scrollbar {
@@ -53,4 +58,66 @@ body {
 
 .glow-purple {
   box-shadow: 0 0 20px rgba(191, 0, 255, 0.3);
+}
+
+::selection {
+  background: rgba(0, 245, 255, 0.2);
+  color: #fff;
+}
+
+section {
+  scroll-margin-top: 6rem;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #00f5ff;
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 60;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 245, 255, 0.5);
+  background: #050505;
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.875rem;
+  transform: translateY(-150%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
 }

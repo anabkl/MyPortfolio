@@ -38,7 +38,7 @@ export default function Contact() {
     'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#00f5ff] focus:ring-1 focus:ring-[#00f5ff] transition-all'
 
   return (
-    <section id="contact" className="py-24 px-4">
+    <section id="contact" className="py-24 px-4" aria-labelledby="contact-title">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -47,7 +47,7 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 id="contact-title" className="text-4xl md:text-5xl font-bold mb-4">
             Get In <span className="gradient-text">Touch</span>
           </h2>
           <div className="w-24 h-1 mx-auto rounded-full mb-4" style={{ background: 'linear-gradient(90deg, #00f5ff, #bf00ff)' }} />
@@ -79,16 +79,21 @@ export default function Contact() {
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4" aria-label="Contact form">
+                <label htmlFor="name" className="sr-only">Your Name</label>
                 <input
+                  id="name"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   required
                   placeholder="Your Name"
                   className={inputClass}
+                  autoComplete="name"
                 />
+                <label htmlFor="email" className="sr-only">Your Email</label>
                 <input
+                  id="email"
                   name="email"
                   type="email"
                   value={form.email}
@@ -96,8 +101,11 @@ export default function Contact() {
                   required
                   placeholder="Your Email"
                   className={inputClass}
+                  autoComplete="email"
                 />
+                <label htmlFor="subject" className="sr-only">Subject</label>
                 <input
+                  id="subject"
                   name="subject"
                   value={form.subject}
                   onChange={handleChange}
@@ -105,7 +113,9 @@ export default function Contact() {
                   placeholder="Subject"
                   className={inputClass}
                 />
+                <label htmlFor="message" className="sr-only">Your Message</label>
                 <textarea
+                  id="message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}
@@ -152,6 +162,7 @@ export default function Contact() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02, x: 4 }}
                 className="glass rounded-xl p-4 flex items-center gap-4 hover:border-[#00f5ff]/40 transition-all"
+                aria-label={`${label}: ${value}`}
               >
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#00f5ff]/10 border border-[#00f5ff]/20">
                   <Icon size={20} className="text-[#00f5ff]" />
