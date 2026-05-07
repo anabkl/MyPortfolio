@@ -50,17 +50,15 @@ export default function Navbar() {
       aria-label="Primary navigation"
     >
       <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
-        <motion.div
-          className="text-2xl font-bold font-mono gradient-text cursor-pointer"
+        <motion.button
+          type="button"
+          className="text-2xl font-bold font-mono gradient-text"
           whileHover={{ scale: 1.05 }}
           onClick={() => scrollTo('home')}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && scrollTo('home')}
           aria-label="Go to Home section"
         >
           A. Lahraoui
-        </motion.div>
+        </motion.button>
 
         <div className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (

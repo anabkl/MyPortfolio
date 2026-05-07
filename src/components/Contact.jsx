@@ -70,7 +70,7 @@ export default function Contact() {
               >
                 <CheckCircle className="mx-auto mb-4 text-[#00f5ff]" size={42} />
                 <h3 className="text-xl font-bold gradient-text mb-2">Email Draft Opened</h3>
-                <p className="text-gray-400" aria-live="polite">Your email app should open with the message ready to send.</p>
+                <p className="text-gray-400">Your email app should open with the message ready to send.</p>
                 <button
                   onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }) }}
                   className="mt-6 px-6 py-2 rounded-full text-sm border border-[#00f5ff] text-[#00f5ff] hover:bg-[#00f5ff]/10 transition-colors"

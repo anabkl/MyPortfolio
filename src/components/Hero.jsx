@@ -190,7 +190,6 @@ export default function Hero() {
                 fetchPriority="high"
                 decoding="async"
                 loading="eager"
-                sizes="(max-width: 1024px) 80vw, 32vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-black/45 p-4 backdrop-blur-md">

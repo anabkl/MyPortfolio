@@ -10,11 +10,13 @@ import Footer from './components/Footer'
 import LoadingScreen from './components/LoadingScreen'
 import CustomCursor from './components/CustomCursor'
 
+const LOADING_TIMEOUT = 1200
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1200)
+    const timer = setTimeout(() => setIsLoading(false), LOADING_TIMEOUT)
     return () => clearTimeout(timer)
   }, [])
 
@@ -32,7 +34,7 @@ function App() {
       ) : (
         <>
           <Navbar />
-          <main id="main-content" aria-busy={isLoading}>
+          <main id="main-content">
             <Hero />
             <About />
             <Projects />
