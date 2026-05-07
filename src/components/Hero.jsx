@@ -188,7 +188,7 @@ export default function Hero() {
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                 style={{ objectPosition: 'center 62%' }}
                 fetchPriority="high"
-                decoding="async"
+                decoding="sync"
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
