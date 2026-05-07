@@ -46,7 +46,7 @@ const cardVariants = {
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-24 px-4 bg-white/[0.02]">
+    <section id="skills" className="py-24 px-4 bg-white/[0.02]" aria-labelledby="skills-title">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -55,7 +55,7 @@ export default function Skills() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 id="skills-title" className="text-4xl md:text-5xl font-bold mb-4">
             Technical <span className="gradient-text">Skills</span>
           </h2>
           <div className="w-24 h-1 mx-auto rounded-full" style={{ background: 'linear-gradient(90deg, #00f5ff, #bf00ff)' }} />

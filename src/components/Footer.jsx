@@ -14,7 +14,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#111] border-t border-white/10 pt-12 pb-6 px-4">
+    <footer className="bg-[#111] border-t border-white/10 pt-12 pb-6 px-4" aria-label="Footer">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 mb-10">
           {/* Logo + Bio */}
@@ -27,7 +27,7 @@ export default function Footer() {
           </div>
 
           {/* Quick links */}
-          <div>
+          <nav aria-label="Footer links">
             <h4 className="font-semibold text-white mb-4">Quick Links</h4>
             <ul className="space-y-2">
               {navLinks.map((link) => (
@@ -35,13 +35,14 @@ export default function Footer() {
                   <button
                     onClick={() => scrollTo(link.toLowerCase())}
                     className="text-sm text-gray-400 hover:text-[#00f5ff] transition-colors"
+                    aria-label={`Go to ${link}`}
                   >
                     {link}
                   </button>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Social links */}
           <div>

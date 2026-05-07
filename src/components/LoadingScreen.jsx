@@ -23,6 +23,8 @@ export default function LoadingScreen() {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
+      role="status"
+      aria-live="polite"
     >
       <motion.div
         initial={{ scale: 0.5, opacity: 0 }}

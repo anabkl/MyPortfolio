@@ -44,8 +44,8 @@ export default function Hero() {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-28 pb-20"
+      aria-labelledby="hero-title"
     >
-      {/* Animated orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#00f5ff]/10 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-[#bf00ff]/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
@@ -65,10 +65,11 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
+            id="hero-title"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-extrabold mb-4"
+            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-4"
           >
             Hi, I&apos;m{' '}
             <span className="gradient-text">Anas Lahraoui</span>
@@ -105,7 +106,7 @@ export default function Hero() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-3 rounded-full font-semibold text-black"
+              className="px-8 py-3 rounded-full font-semibold text-black shadow-lg shadow-[#00f5ff]/20"
               style={{ background: 'linear-gradient(135deg, #00f5ff, #bf00ff)' }}
             >
               View Projects
@@ -186,6 +187,10 @@ export default function Hero() {
                 alt="Anas Lahraoui"
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                 style={{ objectPosition: 'center 62%' }}
+                fetchPriority="high"
+                decoding="async"
+                loading="eager"
+                sizes="(max-width: 1024px) 80vw, 32vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-black/45 p-4 backdrop-blur-md">
@@ -197,7 +202,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, y: [0, 8, 0] }}
