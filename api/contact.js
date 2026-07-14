@@ -65,8 +65,14 @@ export default async function handler(req, res) {
   })
 
   if (!response.ok) {
-    return res.status(502).json({ error: 'Failed to send message.' })
-  }
+  const details = await response.text()
+  console.error('Resend failed:', response.status, details)
+
+  return res.status(502).json({
+    error: `Resend failed: ${response.status}`,
+    details,
+  })
+}
 
   return res.status(200).json({ ok: true })
 }
