@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { CheckCircle, Mail, Send } from 'lucide-react'
+import { AlertCircle, CheckCircle, Loader2, Mail, Send } from 'lucide-react'
 import { GithubIcon, LinkedinIcon, TwitterIcon } from './BrandIcons'
 
 const personalEmail = 'lahraouianas16@gmail.com'
 const twitterUrl = 'https://x.com/LahraouiAnas'
+const initialForm = { name: '', email: '', subject: '', message: '', website: '' }
 
 const contactInfo = [
   { Icon: Mail, label: 'University Email', value: 'anas.lahraoui@usms.ac.ma', href: 'mailto:anas.lahraoui@usms.ac.ma' },
@@ -15,27 +16,49 @@ const contactInfo = [
 ]
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
-  const [submitted, setSubmitted] = useState(false)
+  const [form, setForm] = useState(initialForm)
+  const [status, setStatus] = useState('idle')
+  const [statusMessage, setStatusMessage] = useState('')
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
+  const isSending = status === 'sending'
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+    if (status !== 'idle') {
+      setStatus('idle')
+      setStatusMessage('')
+    }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const subject = form.subject || 'Portfolio contact'
-    const body = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      '',
-      form.message,
-    ].join('\n')
+    setStatus('sending')
+    setStatusMessage('Sending your message...')
 
-    window.location.href = `mailto:${personalEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSubmitted(true)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Message could not be sent.')
+      }
+
+      setStatus('success')
+      setStatusMessage('Message sent successfully. I will reply by email.')
+      setForm(initialForm)
+    } catch (error) {
+      setStatus('error')
+      setStatusMessage(error.message || 'Failed to send message. Please try again later.')
+    }
   }
 
   const inputClass =
-    'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#00f5ff] focus:ring-1 focus:ring-[#00f5ff] transition-all'
+    'w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#00f5ff] focus:ring-1 focus:ring-[#00f5ff] transition-all disabled:cursor-not-allowed disabled:opacity-60'
 
   return (
     <section id="contact" className="py-24 px-4" aria-labelledby="contact-title">
@@ -50,95 +73,124 @@ export default function Contact() {
           <h2 id="contact-title" className="text-4xl md:text-5xl font-bold mb-4">
             Get In <span className="gradient-text">Touch</span>
           </h2>
-          <div className="w-24 h-1 mx-auto rounded-full mb-4" style={{ background: 'linear-gradient(90deg, #00f5ff, #bf00ff)' }} />
-          <p className="text-gray-400 text-lg">Open to internships, collaboration, and practical AI or software projects.</p>
+          <div
+            className="w-24 h-1 mx-auto rounded-full mb-4"
+            style={{ background: 'linear-gradient(90deg, #00f5ff, #bf00ff)' }}
+          />
+          <p className="text-gray-400 text-lg">
+            Open to internships, collaboration, and practical AI or software projects.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {submitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="glass rounded-2xl p-8 text-center"
+            <form onSubmit={handleSubmit} className="space-y-4" aria-label="Contact form">
+              <label htmlFor="name" className="sr-only">Your Name</label>
+              <input
+                id="name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                disabled={isSending}
+                placeholder="Your Name"
+                className={inputClass}
+                autoComplete="name"
+              />
+
+              <label htmlFor="email" className="sr-only">Your Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                disabled={isSending}
+                placeholder="Your Email"
+                className={inputClass}
+                autoComplete="email"
+              />
+
+              <label htmlFor="subject" className="sr-only">Subject</label>
+              <input
+                id="subject"
+                name="subject"
+                value={form.subject}
+                onChange={handleChange}
+                required
+                disabled={isSending}
+                placeholder="Subject"
+                className={inputClass}
+              />
+
+              <label htmlFor="message" className="sr-only">Your Message</label>
+              <textarea
+                id="message"
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                required
+                disabled={isSending}
+                rows={5}
+                placeholder="Your Message"
+                className={inputClass + ' resize-none'}
+              />
+
+              <label htmlFor="website" className="sr-only">Website</label>
+              <input
+                id="website"
+                name="website"
+                value={form.website}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+
+              {statusMessage && (
+                <div
+                  className={`flex items-start gap-3 rounded-xl border px-4 py-3 text-sm ${
+                    status === 'success'
+                      ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100'
+                      : status === 'error'
+                        ? 'border-red-400/30 bg-red-400/10 text-red-100'
+                        : 'border-[#00f5ff]/30 bg-[#00f5ff]/10 text-cyan-100'
+                  }`}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {status === 'success' ? (
+                    <CheckCircle size={18} />
+                  ) : status === 'error' ? (
+                    <AlertCircle size={18} />
+                  ) : (
+                    <Loader2 size={18} className="animate-spin" />
+                  )}
+                  <span>{statusMessage}</span>
+                </div>
+              )}
+
+              <motion.button
+                type="submit"
+                disabled={isSending}
+                whileHover={isSending ? undefined : { scale: 1.02 }}
+                whileTap={isSending ? undefined : { scale: 0.98 }}
+                className="w-full py-3 rounded-xl font-semibold text-black flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-70"
+                style={{ background: 'linear-gradient(135deg, #00f5ff, #bf00ff)' }}
               >
-                <CheckCircle className="mx-auto mb-4 text-[#00f5ff]" size={42} />
-                <h3 className="text-xl font-bold gradient-text mb-2">Email Draft Opened</h3>
-                <p className="text-gray-400">Your email app should open with the message ready to send.</p>
-                <button
-                  onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }) }}
-                  className="mt-6 px-6 py-2 rounded-full text-sm border border-[#00f5ff] text-[#00f5ff] hover:bg-[#00f5ff]/10 transition-colors"
-                >
-                  Send Another
-                </button>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4" aria-label="Contact form">
-                <label htmlFor="name" className="sr-only">Your Name</label>
-                <input
-                  id="name"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your Name"
-                  className={inputClass}
-                  autoComplete="name"
-                />
-                <label htmlFor="email" className="sr-only">Your Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="Your Email"
-                  className={inputClass}
-                  autoComplete="email"
-                />
-                <label htmlFor="subject" className="sr-only">Subject</label>
-                <input
-                  id="subject"
-                  name="subject"
-                  value={form.subject}
-                  onChange={handleChange}
-                  required
-                  placeholder="Subject"
-                  className={inputClass}
-                />
-                <label htmlFor="message" className="sr-only">Your Message</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  required
-                  rows={5}
-                  placeholder="Your Message"
-                  className={inputClass + ' resize-none'}
-                />
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 rounded-xl font-semibold text-black flex items-center justify-center gap-2"
-                  style={{ background: 'linear-gradient(135deg, #00f5ff, #bf00ff)' }}
-                >
-                  <Send size={18} />
-                  Send Message
-                </motion.button>
-              </form>
-            )}
+                {isSending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                {isSending ? 'Sending...' : 'Send Message'}
+              </motion.button>
+            </form>
           </motion.div>
 
-          {/* Info */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -149,8 +201,8 @@ export default function Contact() {
             <div>
               <h3 className="text-xl font-semibold mb-2">Let&apos;s connect</h3>
               <p className="text-gray-400 leading-relaxed">
-                Whether it is an internship opportunity, an academic collaboration, or a real-world
-                AI/software project, I&apos;m always happy to connect and learn from serious work.
+                Use the form for internships, AI product collaborations, dashboards, automation, or
+                full-stack projects. Your message is sent directly without opening an email app.
               </p>
             </div>
 
